@@ -1,0 +1,128 @@
+[
+  {
+    "name": "Forza Horizon 5",
+    "price_per_hour": 200,
+    "category": "forza",
+    "requires_controllers": false
+  },
+  {
+    "name": "FIFA 24",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Tekken 8",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Split fiction",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "It Takes Two",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "FIFA 25",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "WWE 2K25",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "GTA V",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Fortnite",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Khazan",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Street Fighter 6",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Dirt V",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Rocket League",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Injustice 2",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Cricket 24",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Call of Duty",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Uncharted",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "God of War",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Last of Us",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "Resident Evil",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  },
+  {
+    "name": "A Way Out",
+    "price_per_hour": 100,
+    "category": "other",
+    "requires_controllers": true
+  }
+]

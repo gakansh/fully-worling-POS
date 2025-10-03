@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gaming POS</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Gaming POS</h1>
+  </header>
+  <main class="app-container">
+    <!-- User Lookup Section -->
+    <section id="user-section" class="card">
+      <h2>User Lookup</h2>
+      <div class="form-row">
+        <input type="text" id="mobile-input" placeholder="Enter mobile number">
+        <button id="load-user-btn" class="btn primary">Load User</button>
+      </div>
+      <div id="user-details" class="hidden user-details">
+        <p><strong>Mobile:</strong> <span id="user-mobile"></span></p>
+        <p><strong>Wallet Balance:</strong> ₹<span id="user-wallet"></span></p>
+      </div>
+    </section>
+    <!-- Session Start Section -->
+    <section id="session-section" class="card hidden">
+      <h2>Start Session</h2>
+      <div class="form-row">
+        <label for="station-select">Station</label>
+        <select id="station-select"></select>
+      </div>
+      <div class="form-row">
+        <label for="game-select">Game</label>
+        <select id="game-select"></select>
+      </div>
+      <div class="form-row" id="controllers-row">
+        <label for="controller-select">Controllers</label>
+        <select id="controller-select"></select>
+      </div>
+      <div class="form-row">
+        <label for="use-wallet-checkbox" class="checkbox-label">
+          <input type="checkbox" id="use-wallet-checkbox" checked>
+          Use Wallet for this session
+        </label>
+      </div>
+      <div class="form-row">
+        <button id="start-session-btn" class="btn success">Start Session</button>
+      </div>
+    </section>
+    <!-- Active Sessions Section -->
+    <section id="sessions-section" class="card">
+      <h2>Active Sessions</h2>
+      <div id="sessions-list">
+        <p>No active sessions.</p>
+      </div>
+    </section>
+  </main>
+  <!-- Modal Overlay for Ending Session -->
+  <div id="modal-overlay" class="hidden modal-overlay">
+    <div id="modal-content" class="modal">
+      <h3>End Session</h3>
+      <p id="modal-session-info"></p>
+      <div class="form-row">
+        <label for="food-cost-input">Food Cost (₹)</label>
+        <input type="number" id="food-cost-input" min="0" step="0.01" value="0">
+      </div>
+      <div class="form-row">
+        <label for="modal-use-wallet-checkbox" class="checkbox-label">
+          <input type="checkbox" id="modal-use-wallet-checkbox" checked>
+          Use Wallet
+        </label>
+      </div>
+      <div class="modal-buttons">
+        <button id="modal-cancel-btn" class="btn secondary">Cancel</button>
+        <button id="modal-confirm-btn" class="btn danger">Generate Bill</button>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

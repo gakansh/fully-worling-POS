@@ -1,0 +1,305 @@
+
+/* -----------------------------------------------------------------------------
+ * Base design tokens
+ *
+ * Define a few CSS custom properties up front so colors and common values can be
+ * adjusted in one place. Using CSS variables makes it easier to tweak the
+ * palette or theme without hunting down individual rules. These variables
+ * intentionally favour softer hues and gentle contrasts to give the interface a
+ * modern, welcoming feel.
+ */
+
+:root {
+  /* Primary brand colour used for accents and actions */
+  --primary-color: #4f86f7;
+  /* Shades derived from the primary colour for hover states */
+  --primary-color-dark: #3a6ed1;
+  --primary-color-light: #eff4fe;
+  /* Secondary colours for neutral elements */
+  --success-color: #2fa36b;
+  --success-color-dark: #258958;
+  --danger-color: #e14d4d;
+  --danger-color-dark: #c03e3e;
+  /* Greyscale palette */
+  --text-color: #333;
+  --muted-text-color: #666;
+  --background-color: #f8fafc;
+  --card-background: #ffffff;
+  --border-color: #e2e8f0;
+}
+
+/* Base styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Header styling
+ *
+ * The app header uses a subtle gradient to draw the eye without being
+ * overpowering. A drop shadow gives it some elevation over the main content.
+ */
+.app-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  color: #fff;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8em;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Layout container
+ *
+ * A responsive grid ensures cards wrap neatly on narrower screens. Spacing is
+ * managed via gap to keep a consistent rhythm between elements.
+ */
+.app-container {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Card component
+ *
+ * Cards are used throughout the interface to group related controls and
+ * information. A slight shadow and border radius lifts them off the page. The
+ * padding and spacing are tuned for comfortable reading.
+ */
+.card {
+  background-color: var(--card-background);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+}
+
+/* Headings */
+h2 {
+  margin: 0 0 16px 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+/* Form rows
+ *
+ * Use margin-bottom for separation and ensure inputs fill available width.
+ */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+/* Labels */
+.form-row label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Inputs and selects */
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95em;
+  background-color: #fff;
+  color: var(--text-color);
+  transition: border-color 0.2s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Disabled selects */
+.form-row select:disabled {
+  background-color: #f0f4f8;
+  cursor: not-allowed;
+}
+
+/* Checkbox alignment */
+.form-row .checkbox-label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  font-size: 0.95em;
+}
+
+/* Space between checkbox and label */
+.form-row .checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Buttons
+ *
+ * Define a base button class and variants for primary, success and danger. The
+ * hover states darken the base colour. A slight box-shadow provides
+ * tactility.
+ */
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  transition: background-color 0.15s ease, transform 0.05s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  user-select: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.btn.primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+.btn.primary:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.btn.success {
+  background-color: var(--success-color);
+  color: #fff;
+}
+.btn.success:hover {
+  background-color: var(--success-color-dark);
+}
+
+.btn.danger {
+  background-color: var(--danger-color);
+  color: #fff;
+}
+.btn.danger:hover {
+  background-color: var(--danger-color-dark);
+}
+
+/* Secondary button (used for cancel/neutral actions) */
+.btn.secondary {
+  background-color: var(--border-color);
+  color: var(--text-color);
+}
+.btn.secondary:hover {
+  background-color: #d3dbe7;
+}
+
+/* User details paragraph spacing */
+.user-details p {
+  margin: 0 0 6px 0;
+  font-size: 0.95em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Sessions list table */
+#sessions-list table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.92em;
+}
+
+#sessions-list thead tr {
+  background-color: var(--primary-color-light);
+}
+
+#sessions-list th,
+#sessions-list td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+#sessions-list th {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+#sessions-list tbody tr:nth-child(even) {
+  background-color: #f9fbfd;
+}
+
+#sessions-list tbody tr:hover {
+  background-color: #eef4fb;
+}
+
+/* Modal styles
+ *
+ * The modal overlay lightly darkens the entire page. The modal itself is
+ * centred with a gentle shadow and rounded corners. Button alignment
+ * intentionally mirrors the form layout.
+ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.3em;
+  color: var(--primary-color);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
