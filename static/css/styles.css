@@ -1,305 +1,458 @@
-
 /* -----------------------------------------------------------------------------
- * Base design tokens
- *
- * Define a few CSS custom properties up front so colors and common values can be
- * adjusted in one place. Using CSS variables makes it easier to tweak the
- * palette or theme without hunting down individual rules. These variables
- * intentionally favour softer hues and gentle contrasts to give the interface a
- * modern, welcoming feel.
- */
+   Gaming POS – Polished UI
+   - Clean spacing & rhythm
+   - Accessible focus states
+   - Professional color system
+   - Better tables, forms, modals
+   - Stations grid & status pills
+   - Subtle motion; dark mode support
+----------------------------------------------------------------------------- */
 
+/* Design tokens */
 :root {
-  /* Primary brand colour used for accents and actions */
-  --primary-color: #4f86f7;
-  /* Shades derived from the primary colour for hover states */
-  --primary-color-dark: #3a6ed1;
-  --primary-color-light: #eff4fe;
-  /* Secondary colours for neutral elements */
-  --success-color: #2fa36b;
-  --success-color-dark: #258958;
-  --danger-color: #e14d4d;
-  --danger-color-dark: #c03e3e;
-  /* Greyscale palette */
-  --text-color: #333;
-  --muted-text-color: #666;
-  --background-color: #f8fafc;
-  --card-background: #ffffff;
-  --border-color: #e2e8f0;
+  --brand:           #4f86f7;
+  --brand-600:       #3a6ed1;
+  --brand-050:       #eff4fe;
+
+  --success:         #22a06b;
+  --success-700:     #1b8559;
+  --danger:          #e14d4d;
+  --danger-700:      #c03e3e;
+  --warning:         #f59e0b;
+
+  --bg:              #f7f9fc;
+  --card:            #ffffff;
+  --text:            #1f2937;
+  --muted:           #6b7280;
+  --line:            #e5e7eb;
+
+  --ring:            rgba(79, 134, 247, .35);
+  --shadow-sm:       0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:       0 6px 18px rgba(15, 23, 42, .06);
+
+  --radius:          12px;
+  --radius-sm:       8px;
+
+  --space-1:         4px;
+  --space-2:         8px;
+  --space-3:         12px;
+  --space-4:         16px;
+  --space-5:         20px;
+  --space-6:         24px;
+  --space-7:         28px;
+  --space-8:         32px;
+
+  --font:            -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
 }
 
-/* Base styles */
+/* Optional dark mode via attribute */
+html[data-theme="dark"] {
+  --bg:        #0b1220;
+  --card:      #10182a;
+  --text:      #e5e7eb;
+  --muted:     #9aa4b2;
+  --line:      #1f2a44;
+  --brand-050: #0f1b35;
+  --ring:      rgba(79,134,247,.4);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-md: 0 6px 18px rgba(0,0,0,.35);
+}
+
+/* Respect system theme by default */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg:        #0b1220;
+    --card:      #10182a;
+    --text:      #e5e7eb;
+    --muted:     #9aa4b2;
+    --line:      #1f2a44;
+    --brand-050: #0f1b35;
+    --ring:      rgba(79,134,247,.4);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+    --shadow-md: 0 6px 18px rgba(0,0,0,.35);
+  }
+}
+
+/* Base */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
   margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Header styling
- *
- * The app header uses a subtle gradient to draw the eye without being
- * overpowering. A drop shadow gives it some elevation over the main content.
- */
+/* Focus visibility */
+:where(button, [href], input, select, textarea) {
+  outline: none;
+}
+:where(button, [href], input, select, textarea):focus-visible {
+  box-shadow: 0 0 0 3px var(--ring);
+  border-radius: 8px;
+}
+
+/* Header */
 .app-header {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+  background: linear-gradient(135deg, var(--brand), var(--brand-600));
   color: #fff;
-  padding: 24px 20px;
+  padding: 28px 20px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
 }
-
 .app-header h1 {
   margin: 0;
-  font-size: 1.8em;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: .2px;
+  font-weight: 700;
+}
+.app-header .sub {
+  margin-top: 6px;
+  opacity: .9;
+  font-size: 13px;
 }
 
-/* Layout container
- *
- * A responsive grid ensures cards wrap neatly on narrower screens. Spacing is
- * managed via gap to keep a consistent rhythm between elements.
- */
+/* Container grid */
 .app-container {
-  max-width: 1200px;
-  margin: 32px auto;
-  padding: 0 20px;
+  max-width: 1280px;
+  margin: var(--space-8) auto;
+  padding: 0 var(--space-5);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-6);
 }
 
-/* Card component
- *
- * Cards are used throughout the interface to group related controls and
- * information. A slight shadow and border radius lifts them off the page. The
- * padding and spacing are tuned for comfortable reading.
- */
+/* Card */
 .card {
-  background-color: var(--card-background);
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  padding: 24px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border-color);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in oklab, var(--line), var(--brand) 15%);
+}
+.card > .desc {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: -4px;
+  margin-bottom: var(--space-4);
 }
 
 /* Headings */
 h2 {
-  margin: 0 0 16px 0;
-  font-size: 1.5em;
-  font-weight: 600;
-  color: var(--primary-color);
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 8px;
+  margin: 0 0 var(--space-4) 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
 }
 
-/* Form rows
- *
- * Use margin-bottom for separation and ensure inputs fill available width.
- */
-.form-row {
+/* Section chip nav (optional) */
+.chipbar {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
 }
+.chip {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.chip:hover { border-color: var(--brand); color: var(--brand); }
+.chip.active { background: var(--brand-050); border-color: var(--brand); color: var(--brand-600); }
 
-/* Labels */
+/* Form */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-bottom: var(--space-4);
+}
 .form-row label {
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: var(--text-color);
+  font-weight: 600;
+  font-size: 13px;
+}
+.form-row .hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: -4px;
 }
 
-/* Inputs and selects */
-.form-row input[type="text"],
-.form-row input[type="number"],
-.form-row select {
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 0.95em;
-  background-color: #fff;
-  color: var(--text-color);
-  transition: border-color 0.2s ease;
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+html[data-theme="dark"] input,
+html[data-theme="dark"] select {
+  background: #0f1729;
+  border-color: #1f2a44;
+  color: var(--text);
 }
 
-.form-row input:focus,
-.form-row select:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
+input:focus,
+select:focus { border-color: var(--brand); box-shadow: 0 0 0 2px var(--ring); }
 
-/* Disabled selects */
-.form-row select:disabled {
-  background-color: #f0f4f8;
+input[disabled],
+select[disabled] {
+  background: color-mix(in oklab, var(--card), #aab4c5 6%);
+  color: var(--muted);
   cursor: not-allowed;
 }
 
-/* Checkbox alignment */
-.form-row .checkbox-label {
+/* Inline input group */
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+.input-group > * { flex: 1; }
+
+/* Checkbox line */
+.checkbox-line {
   display: flex;
   align-items: center;
-  font-weight: normal;
-  font-size: 0.95em;
+  gap: 10px;
+  font-size: 14px;
+}
+.checkbox-line input[type="checkbox"] {
+  width: 18px; height: 18px;
 }
 
-/* Space between checkbox and label */
-.form-row .checkbox-label input[type="checkbox"] {
-  margin-right: 8px;
-  width: 16px;
-  height: 16px;
-}
-
-/* Buttons
- *
- * Define a base button class and variants for primary, success and danger. The
- * hover states darken the base colour. A slight box-shadow provides
- * tactility.
- */
+/* Buttons */
 .btn {
-  padding: 10px 18px;
+  appearance: none;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 0.95em;
-  font-weight: 500;
-  transition: background-color 0.15s ease, transform 0.05s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   user-select: none;
+  transition: transform .06s ease, filter .15s ease, background .15s ease;
+  box-shadow: var(--shadow-sm);
+}
+.btn:active { transform: translateY(1px); }
+
+.btn.primary { background: var(--brand); color: #fff; }
+.btn.primary:hover { filter: brightness(0.96); }
+.btn.success { background: var(--success); color: #fff; }
+.btn.success:hover { background: var(--success-700); }
+.btn.danger { background: var(--danger); color: #fff; }
+.btn.danger:hover { background: var(--danger-700); }
+.btn.secondary { background: color-mix(in oklab, var(--card), #cdd6e7 35%); color: var(--text); }
+.btn.secondary:hover { filter: brightness(.98); }
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+.btn.ghost:hover { border-color: var(--brand); color: var(--brand-600); }
+
+/* Button row helper */
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+/* Pills / badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--brand-050);
+  color: var(--brand-600);
+}
+.pill.success { background: color-mix(in oklab, #22a06b 10%, var(--card)); color: #177e50; }
+.pill.danger  { background: color-mix(in oklab, #e14d4d 10%, var(--card)); color: #a72f2f; }
+.pill.warn    { background: color-mix(in oklab, #f59e0b 10%, var(--card)); color: #855300; }
+
+/* Stations grid (A..G) */
+.stations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+.station {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 6px;
+}
+.station .label {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .5px;
+}
+.station .status {
+  font-size: 12px;
+  color: var(--muted);
+}
+.station.occupied {
+  border-color: color-mix(in oklab, var(--danger), var(--line) 60%);
+  background: color-mix(in oklab, var(--danger), var(--card) 93%);
+}
+.station.free {
+  border-color: color-mix(in oklab, var(--success), var(--line) 60%);
+  background: color-mix(in oklab, var(--success), var(--card) 95%);
 }
 
-.btn.primary {
-  background-color: var(--primary-color);
-  color: #fff;
-}
-.btn.primary:hover {
-  background-color: var(--primary-color-dark);
-}
-
-.btn.success {
-  background-color: var(--success-color);
-  color: #fff;
-}
-.btn.success:hover {
-  background-color: var(--success-color-dark);
-}
-
-.btn.danger {
-  background-color: var(--danger-color);
-  color: #fff;
-}
-.btn.danger:hover {
-  background-color: var(--danger-color-dark);
-}
-
-/* Secondary button (used for cancel/neutral actions) */
-.btn.secondary {
-  background-color: var(--border-color);
-  color: var(--text-color);
-}
-.btn.secondary:hover {
-  background-color: #d3dbe7;
-}
-
-/* User details paragraph spacing */
-.user-details p {
-  margin: 0 0 6px 0;
-  font-size: 0.95em;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Sessions list table */
-#sessions-list table {
+/* Tables */
+.table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
   overflow: hidden;
-  font-size: 0.92em;
+  font-size: 14px;
 }
-
-#sessions-list thead tr {
-  background-color: var(--primary-color-light);
+.table thead tr {
+  background: var(--brand-050);
 }
-
-#sessions-list th,
-#sessions-list td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border-color);
+.table th, .table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
   text-align: left;
 }
+.table th {
+  font-weight: 700;
+  color: var(--text);
+}
+.table tbody tr:nth-child(even) { background: color-mix(in oklab, var(--card), #dfe8fb 7%); }
+.table tbody tr:hover { background: color-mix(in oklab, var(--brand-050), #fff 60%); }
 
-#sessions-list th {
-  font-weight: 600;
-  color: var(--text-color);
+/* Sessions list table compatibility with your existing IDs */
+#sessions-list table { composes: table; } /* if your build doesn't support composes, duplicate styles */
+#sessions-list thead tr { background: var(--brand-050); }
+#sessions-list th, #sessions-list td {
+  padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left;
 }
 
-#sessions-list tbody tr:nth-child(even) {
-  background-color: #f9fbfd;
-}
-
-#sessions-list tbody tr:hover {
-  background-color: #eef4fb;
-}
-
-/* Modal styles
- *
- * The modal overlay lightly darkens the entire page. The modal itself is
- * centred with a gentle shadow and rounded corners. Button alignment
- * intentionally mirrors the form layout.
- */
+/* Modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed; inset: 0;
+  background: rgba(3, 10, 27, .55);
+  display: grid; place-items: center;
   z-index: 1000;
   padding: 20px;
-  box-sizing: border-box;
+  animation: fadeIn .15s ease;
 }
-
 .modal {
-  background-color: var(--card-background);
-  border-radius: 8px;
-  padding: 24px 20px;
-  width: 100%;
-  max-width: 440px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.2s ease;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  width: min(520px, 92vw);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  animation: pop .16s ease;
 }
-
 .modal h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.3em;
-  color: var(--primary-color);
+  margin: 0 0 var(--space-3) 0;
+  font-size: 18px;
+  color: var(--brand);
+}
+.modal .modal-buttons {
+  display: flex; gap: 10px; justify-content: flex-end; margin-top: var(--space-5);
 }
 
-.modal-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
+/* Toast (optional) */
+.toast {
+  position: fixed; right: 16px; bottom: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: 12px 14px;
+  min-width: 2600px;
+  display: grid; gap: 6px;
+  z-index: 1100;
+  animation: slideUp .18s ease;
+}
+.toast .title { font-weight: 700; font-size: 14px; }
+.toast .msg { color: var(--muted); font-size: 13px; }
+
+/* Utility */
+.hidden { display: none !important; }
+.stack-sm  > * + * { margin-top: 8px; }
+.stack-md  > * + * { margin-top: 12px; }
+.stack-lg  > * + * { margin-top: 18px; }
+.row       { display: flex; gap: 12px; flex-wrap: wrap; }
+.row.right { justify-content: flex-end; }
+
+/* Print-friendly invoice tweaks (targets your generated HTML) */
+@media print {
+  body { background: #fff; }
+  .wrap { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  table { font-size: 12px; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Animations */
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pop { from { transform: translateY(6px); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes slideUp { from { transform: translateY(10px); opacity: 0 } to { transform: none; opacity: 1 } }
+
+/* Small helpers for status dots and tooltips */
+.dot {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+}
+.dot.green { background: var(--success); }
+.dot.red   { background: var(--danger); }
+.dot.warn  { background: var(--warning); }
+
+.tooltip {
+  position: relative; cursor: help;
+}
+.tooltip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  white-space: nowrap;
+  background: #111; color: #fff; padding: 6px 8px; font-size: 12px; border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+}
+
+/* Optional tab strip (if you add tabs later) */
+.tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin-bottom: var(--space-4); }
+.tab {
+  padding: 10px 12px; font-weight: 600; font-size: 14px; border-radius: 10px 10px 0 0;
+  border: 1px solid transparent; border-bottom: none; cursor: pointer;
+}
+.tab[aria-selected="true"] {
+  color: var(--brand-600);
+  background: var(--brand-050);
+  border-color: var(--line);
 }

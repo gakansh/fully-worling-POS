@@ -124,5 +124,47 @@
     "wallet_used": 0.0,
     "loyalty_earned": 0.0,
     "remaining_wallet": 0.0
+  },
+  {
+    "invoice_id": "1cf9036c0aa844518ca5a587b398d7f4",
+    "date": "2025-10-03 21:53:00",
+    "mobile": "7839577536",
+    "amount_due": 0.0,
+    "game": "WWE 2K25",
+    "station": "B",
+    "controllers": 2,
+    "base_cost": 0,
+    "food_cost": 0.0,
+    "wallet_used": 0.0,
+    "loyalty_earned": 0.0,
+    "remaining_wallet": 0.0
+  },
+  {
+    "invoice_id": "6e08f21f2d7e4f8ba87915fa08f83244",
+    "date": "2025-10-03 21:53:22",
+    "mobile": "7839577536",
+    "amount_due": 5000.0,
+    "game": "WWE 2K25",
+    "station": "A",
+    "controllers": 2,
+    "base_cost": 0,
+    "food_cost": 5000.0,
+    "wallet_used": 0.0,
+    "loyalty_earned": 500.0,
+    "remaining_wallet": 500.0
+  },
+  {
+    "invoice_id": "2be20edd9b534b8d86571a2e0937d672",
+    "date": "2025-10-05 00:21:58",
+    "mobile": "7839577536",
+    "amount_due": 0.0,
+    "game": "WWE 2K25",
+    "station": "A",
+    "controllers": 2,
+    "base_cost": 100.0,
+    "food_cost": 200.0,
+    "wallet_used": 300.0,
+    "loyalty_earned": 30.0,
+    "remaining_wallet": 230.0
   }
 ]
