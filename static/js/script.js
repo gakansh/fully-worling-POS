@@ -1,4 +1,4 @@
-// Client‑side script for Gaming POS web app
+// Client-side script for Gaming POS web app with SweetAlert + dynamic pricing
 
 let currentUser = null;
 let gamesList = [];
@@ -6,7 +6,6 @@ let sessionsList = [];
 let stationsStatus = {};
 let selectedSessionId = null;
 
-// Utility to format duration from ISO start time to now in human readable form
 function formatDuration(startISO) {
   try {
     const start = new Date(startISO);
@@ -22,7 +21,6 @@ function formatDuration(startISO) {
   }
 }
 
-// Fetch games from server and populate select
 function loadGames() {
   fetch('/api/games')
     .then(res => res.json())
@@ -33,11 +31,11 @@ function loadGames() {
       data.forEach(game => {
         const opt = document.createElement('option');
         opt.value = game.name;
-        opt.textContent = game.name;
+        opt.textContent = `${game.name} (₹${game.price_per_hour}/h)`;
         opt.dataset.requiresControllers = game.requires_controllers;
         gameSelect.appendChild(opt);
       });
-      // populate controllers select with default values 1..4
+
       const controllerSelect = document.getElementById('controller-select');
       controllerSelect.innerHTML = '';
       for (let i = 1; i <= 4; i++) {
@@ -46,19 +44,37 @@ function loadGames() {
         opt.textContent = i;
         controllerSelect.appendChild(opt);
       }
+
       onGameChange();
+
+      // Also render admin price editing UI if present
+      const adminDiv = document.getElementById('game-admin');
+      if (adminDiv) {
+        adminDiv.innerHTML = '';
+        data.forEach(game => {
+          const p = document.createElement('p');
+          p.textContent = `${game.name} — ₹${game.price_per_hour}/h `;
+          const btn = document.createElement('button');
+          btn.textContent = 'Edit Price';
+          btn.className = 'btn secondary';
+          btn.onclick = () => promptUpdateGamePrice(game.name, game.price_per_hour);
+          p.appendChild(btn);
+          adminDiv.appendChild(p);
+        });
+      }
     })
-    .catch(err => console.error('Failed to load games', err));
+    .catch(err => {
+      console.error('Failed to load games', err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to load games' });
+    });
 }
 
-// Load stations and sessions
 function refreshAll() {
   fetch('/api/stations')
     .then(res => res.json())
     .then(stations => {
       stationsStatus = stations;
       populateStationSelect();
-      // After station status, fetch sessions
       return fetch('/api/sessions');
     })
     .then(res => res.json())
@@ -66,10 +82,12 @@ function refreshAll() {
       sessionsList = data;
       renderSessions();
     })
-    .catch(err => console.error('Failed to refresh stations or sessions', err));
+    .catch(err => {
+      console.error('Failed to refresh', err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to refresh sessions or stations' });
+    });
 }
 
-// Populate station dropdown and disable occupied ones
 function populateStationSelect() {
   const select = document.getElementById('station-select');
   const letters = ['A','B','C','D','E','F','G'];
@@ -85,11 +103,10 @@ function populateStationSelect() {
   });
 }
 
-// Load or create user
 function loadUser() {
   const mobile = document.getElementById('mobile-input').value.trim();
   if (!mobile) {
-    alert('Please enter a mobile number');
+    Swal.fire({ icon: 'warning', title: 'Oops', text: 'Please enter a mobile number' });
     return;
   }
   fetch(`/api/users/${encodeURIComponent(mobile)}`)
@@ -100,13 +117,14 @@ function loadUser() {
       document.getElementById('user-wallet').textContent = user.wallet.toFixed(2);
       document.getElementById('user-details').classList.remove('hidden');
       document.getElementById('session-section').classList.remove('hidden');
-      // update wallet use checkboxes default
       document.getElementById('use-wallet-checkbox').checked = true;
     })
-    .catch(err => console.error('Failed to load user', err));
+    .catch(err => {
+      console.error('Failed to load user', err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to load user' });
+    });
 }
 
-// Handle game change to show/hide controller selection
 function onGameChange() {
   const gameSelect = document.getElementById('game-select');
   const selectedOption = gameSelect.options[gameSelect.selectedIndex];
@@ -119,17 +137,15 @@ function onGameChange() {
   }
 }
 
-// Start a new session
 function startSession() {
   if (!currentUser) {
-    alert('Please load a user first');
+    Swal.fire({ icon: 'warning', title: 'Oops', text: 'Please load a user first' });
     return;
   }
   const station = document.getElementById('station-select').value;
   const game = document.getElementById('game-select').value;
   const controllersVisible = !document.getElementById('controllers-row').classList.contains('hidden');
   const controllers = controllersVisible ? parseInt(document.getElementById('controller-select').value) : 0;
-  const useWallet = document.getElementById('use-wallet-checkbox').checked;
   const payload = { mobile: currentUser.mobile, station, game, controllers };
   fetch('/api/start_session', {
     method: 'POST',
@@ -139,16 +155,17 @@ function startSession() {
     .then(res => res.json())
     .then(resp => {
       if (resp.error) {
-        alert(resp.error);
+        Swal.fire({ icon: 'error', title: 'Error', text: resp.error });
       } else {
-        // Optionally clear selections or show message
         refreshAll();
       }
     })
-    .catch(err => console.error('Failed to start session', err));
+    .catch(err => {
+      console.error('Failed to start session', err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Could not start session' });
+    });
 }
 
-// Render active sessions table
 function renderSessions() {
   const container = document.getElementById('sessions-list');
   if (!sessionsList || sessionsList.length === 0) {
@@ -174,7 +191,6 @@ function renderSessions() {
       td.textContent = val;
       tr.appendChild(td);
     });
-    // actions cell
     const actionsTd = document.createElement('td');
     const endBtn = document.createElement('button');
     endBtn.textContent = 'End';
@@ -190,7 +206,6 @@ function renderSessions() {
   container.appendChild(table);
 }
 
-// Open modal to end session
 function openModal(sessionId) {
   selectedSessionId = sessionId;
   const sess = sessionsList.find(s => s.session_id === sessionId);
@@ -207,7 +222,6 @@ function closeModal() {
   selectedSessionId = null;
 }
 
-// Confirm termination and generate invoice
 function confirmEndSession() {
   if (!selectedSessionId) {
     closeModal();
@@ -224,22 +238,21 @@ function confirmEndSession() {
     .then(res => res.json())
     .then(resp => {
       if (resp.error) {
-        alert(resp.error);
+        Swal.fire({ icon: 'error', title: 'Error', text: resp.error });
       } else {
         closeModal();
-        // update user wallet
         if (currentUser && currentUser.mobile === resp.invoice.mobile) {
           currentUser.wallet = resp.invoice.remaining_wallet;
           document.getElementById('user-wallet').textContent = currentUser.wallet.toFixed(2);
         }
-        // refresh sessions and stations
         refreshAll();
-        // inform the user and open invoice
-        const msg = `Total Due: ₹${resp.invoice.total_due.toFixed(2)}\n` +
-                    `Loyalty Earned: ₹${resp.invoice.loyalty_earned.toFixed(2)}\n` +
-                    `Wallet Remaining: ₹${resp.invoice.remaining_wallet.toFixed(2)}`;
-        alert(msg);
-        // open PDF in new tab if available
+        const inv = resp.invoice;
+        const msg = `Gaming Cost: ₹${inv.base_cost.toFixed(2)}\n` +
+                    `Food Cost: ₹${inv.food_cost.toFixed(2)}\n` +
+                    `Total Due: ₹${inv.total_due.toFixed(2)}\n` +
+                    `Loyalty Earned (on gaming only): ₹${inv.loyalty_earned.toFixed(2)}\n` +
+                    `Wallet Remaining: ₹${inv.remaining_wallet.toFixed(2)}`;
+        Swal.fire({ icon: 'info', title: 'Invoice', text: msg });
         if (resp.pdf) {
           window.open(resp.pdf, '_blank');
         }
@@ -247,17 +260,56 @@ function confirmEndSession() {
     })
     .catch(err => {
       console.error('Failed to end session', err);
+      Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to end session' });
     });
 }
 
-// Event listeners
+// Prompt UI for updating price
+function promptUpdateGamePrice(gameName, currentPrice) {
+  Swal.fire({
+    title: `Set new price for ${gameName}`,
+    input: 'number',
+    inputLabel: 'Price per hour',
+    inputValue: currentPrice,
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value || isNaN(value) || Number(value) <= 0) {
+        return 'Please enter a valid positive price';
+      }
+      return null;
+    }
+  }).then(result => {
+    if (result.isConfirmed) {
+      const newPrice = parseFloat(result.value);
+      fetch('/api/games/update_price', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: gameName, price_per_hour: newPrice })
+      })
+      .then(r => r.json())
+      .then(resp => {
+        if (resp.error) {
+          Swal.fire({ icon: 'error', title: 'Error', text: resp.error });
+        } else {
+          Swal.fire({ icon: 'success', title: 'Updated', text: `New price: ₹${newPrice}` });
+          loadGames();
+        }
+      })
+      .catch(err => {
+        console.error('Error updating price', err);
+        Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to update price' });
+      });
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadGames();
   refreshAll();
-  // refresh durations every minute
   setInterval(() => {
     renderSessions();
   }, 60000);
+
   document.getElementById('load-user-btn').addEventListener('click', loadUser);
   document.getElementById('game-select').addEventListener('change', onGameChange);
   document.getElementById('start-session-btn').addEventListener('click', startSession);
